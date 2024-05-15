@@ -5,16 +5,17 @@
 #include "CoreMinimal.h"
 //#include "UObject/NoExportTypes.h"
 #include "AuraWidgetController.generated.h"
-
 class UAttributeSet;
 class UAbilitySystemComponent;
 
+//~ STRUCTS
 USTRUCT(BlueprintType)
 struct FWidgetControllerParams
 {
 	GENERATED_BODY()
 
 	FWidgetControllerParams() {}
+	
 	FWidgetControllerParams(APlayerController* PC, APlayerState* PS, UAbilitySystemComponent* ASC, UAttributeSet* AS)
 	: PlayerController(PC), PlayerState(PS), AbilitySystemComponent(ASC), AttributeSet(AS) {}
 

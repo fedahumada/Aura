@@ -5,10 +5,14 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "AuraPlayerController.generated.h"
+struct FGameplayTag;
+struct FInputActionValue;
+class UAuraInputConfig;
 class UInputMappingContext;
 class UInputAction;
 class IEnemyInterface;
-struct FInputActionValue;
+class UAuraAbilitySystemComponent;
+class USplineComponent;
 
 /**
  * 
@@ -28,6 +32,14 @@ protected:
 	virtual void SetupInputComponent() override;
 
 private:
+	UPROPERTY()
+	TObjectPtr<UAuraAbilitySystemComponent> AuraAbilitySystemComponent;
+
+	UAuraAbilitySystemComponent* GetASC();
+	
+	UPROPERTY(EditDefaultsOnly, Category="Input")
+	TObjectPtr<UAuraInputConfig> InputConfig;
+	
 	UPROPERTY(EditAnywhere, Category="Input")
 	TObjectPtr<UInputMappingContext> AuraContext;
 	
@@ -36,7 +48,33 @@ private:
 
 	void Move(const FInputActionValue& InputActionValue);
 
+	void AbilityInputTagPressed(FGameplayTag InputTag);
+	
+	void AbilityInputTagReleased(FGameplayTag InputTag);
+
+	void AbilityInputTagHeld(FGameplayTag InputTag);
+
+	FVector CachedDestination = FVector::ZeroVector;
+
+	float FollowTime;
+
+	float ShortPressThreshold;
+
+	bool bAutoRunning;
+
+	void AutoRun();
+
+	UPROPERTY(EditDefaultsOnly)
+	float AutoRunAcceptanceRadius;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USplineComponent> Spline;
+	
 	void CursorTrace();
+
+	FHitResult CursorHit;
+
+	bool bIsTargeting;
 	
 	IEnemyInterface* LastActor;
 	

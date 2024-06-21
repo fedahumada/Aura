@@ -170,7 +170,7 @@ public:
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing=OnRep_MaxMana, Category="Vital Attributes")
 	FGameplayAttributeData MaxMana;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,MaxMana);
-
+	
 	UFUNCTION()
 	void OnRep_Armor(const FGameplayAttributeData& OldArmor) const;
 
@@ -200,8 +200,20 @@ public:
 	
 	UFUNCTION()
 	void OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana) const;
+
+
+	/*
+ * ~META ATTRIBUTES
+ */
+	
+	UPROPERTY(BlueprintReadOnly, Category="Meta Attributes")
+	FGameplayAttributeData IncomingDamage;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, IncomingDamage);
+	
 	
 private:
-	void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const;	
+	void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const;
+
+	void Showfloatingtext(const FEffectProperties& Props, float Damage) const;
 };
 

@@ -42,6 +42,11 @@ public:
 	FGameplayTag Attributes_Secondary_MaxHealth;
 	FGameplayTag Attributes_Secondary_MaxMana;
 
+	//~ META ATTRIBUTES 
+	FGameplayTag Damage;
+
+	//~ MISC
+	FGameplayTag Effect_HitReact;
 private:
     static FAuraGameplayTags GameplayTags;
 };

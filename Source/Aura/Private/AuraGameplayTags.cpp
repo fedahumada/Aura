@@ -114,4 +114,21 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 		FName("Attributes.Secondary.MaxMana"),
 		FString("Maximum amount of Mana obtainable")
 		);
+
+	
+	//~ Meta Attributes
+
+	GameplayTags.Damage = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Damage"),
+		FString("Damage")
+		);
+
+
+	//~ Misc
+
+	GameplayTags.Effect_HitReact = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Effect.HitReact"),
+		FString("Tag granted when Hit Reacting")
+		);
+	
 }

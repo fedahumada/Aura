@@ -41,12 +41,28 @@ public:
 	FGameplayTag Attributes_Secondary_ManaRegeneration;
 	FGameplayTag Attributes_Secondary_MaxHealth;
 	FGameplayTag Attributes_Secondary_MaxMana;
-
+	
 	//~ META ATTRIBUTES 
 	FGameplayTag Damage;
 
+	//~ DAMAGE TYPES
+	FGameplayTag Damage_Fire;
+	FGameplayTag Damage_Lightning;
+	FGameplayTag Damage_Arcane;
+	FGameplayTag Damage_Physical;
+
+	//~ RESISTANCES
+	FGameplayTag Attributes_Resistance_Fire;
+	FGameplayTag Attributes_Resistance_Lightning;
+	FGameplayTag Attributes_Resistance_Arcane;
+	FGameplayTag Attributes_Resistance_Physical;
+
+	//~ MAP ->DAMAGE TYPES TO RESISTANCES
+	TMap<FGameplayTag, FGameplayTag> DamageTypesToResistancesMap;
+	
 	//~ MISC
 	FGameplayTag Effect_HitReact;
+	
 private:
     static FAuraGameplayTags GameplayTags;
 };

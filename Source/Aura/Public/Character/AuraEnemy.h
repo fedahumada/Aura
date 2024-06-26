@@ -38,8 +38,8 @@ public:
 
 	virtual void Die() override;	
 	/*
-		 * ~ END INTERFACES
-		 */
+	 * ~ END INTERFACES
+	*/
 
 	UPROPERTY(BlueprintAssignable)
 	FOnAttributeChangedSignature OnHealthChanged;
@@ -53,7 +53,7 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category="Combat")
 	float BaseWalkSpeed = 250.f;
 	
-	void HitReactChanged(const FGameplayTag CallbackTag, int32 NewCount);
+	void HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount);
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Combat")
 	float LifeSpan = 5.f;
@@ -73,6 +73,11 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UWidgetComponent> HealthBar;
+
+	
+	/*
+	 * ~ AI
+	*/
 
 	UPROPERTY(EditAnywhere, Category="AI")
 	TObjectPtr<UBehaviorTree> BehaviorTree;

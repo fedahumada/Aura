@@ -8,6 +8,8 @@
 #include "Aura/Aura.h"
 #include "AuraGameplayTags.h"
 #include "AI/AuraAIController.h"
+#include "BehaviorTree/BehaviorTree.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "UI/Widget/AuraUserWidget.h"
@@ -25,13 +27,24 @@ AAuraEnemy::AAuraEnemy()
 
 	HealthBar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
 	HealthBar->SetupAttachment(GetRootComponent());
+
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationRoll = false;
+	bUseControllerRotationYaw = false;
+	GetCharacterMovement()->bUseControllerDesiredRotation = true;
+	GetCharacterMovement()->bOrientRotationToMovement = true;
 }
 
 void AAuraEnemy::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 
+	if (!HasAuthority()) return;
 	AuraAIController = Cast<AAuraAIController>(NewController);
+	AuraAIController->GetBlackboardComponent()->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
+	AuraAIController->RunBehaviorTree(BehaviorTree);
+	AuraAIController->GetBlackboardComponent()->SetValueAsBool(FName("bIsHitReacting"), false);
+	AuraAIController->GetBlackboardComponent()->SetValueAsBool(FName("RangedAttacker"), CharacterClass != ECharacterClass::Warrior);
 }
 
 void AAuraEnemy::BeginPlay()
@@ -65,7 +78,7 @@ void AAuraEnemy::BeginPlay()
 			}
 		);
 		AbilitySystemComponent->RegisterGameplayTagEvent(FAuraGameplayTags::Get().Effect_HitReact, EGameplayTagEventType::NewOrRemoved).AddUObject(
-			this, &AAuraEnemy::HitReactChanged
+			this, &AAuraEnemy::HitReactTagChanged
 		);
 		
 		OnHealthChanged.Broadcast(AuraAS->GetHealth());
@@ -74,10 +87,11 @@ void AAuraEnemy::BeginPlay()
 
 }
 
-void AAuraEnemy::HitReactChanged(const FGameplayTag CallbackTag, int32 NewCount)
+void AAuraEnemy::HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
 {
 	bIsHitReacting = NewCount > 0;
 	GetCharacterMovement()->MaxWalkSpeed = bIsHitReacting ? 0.f : BaseWalkSpeed;
+	AuraAIController->GetBlackboardComponent()->SetValueAsBool(FName("bIsHitReacting"), bIsHitReacting);
 }
 
 void AAuraEnemy::InitAbilityActorInfo()

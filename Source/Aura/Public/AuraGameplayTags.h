@@ -60,7 +60,13 @@ public:
 	//~ MAP ->DAMAGE TYPES TO RESISTANCES
 	TMap<FGameplayTag, FGameplayTag> DamageTypesToResistancesMap;
 	
+	//~ MONTAGES
+	FGameplayTag Montage_Attack_Weapon;
+	FGameplayTag Montage_Attack_RightHand;
+	FGameplayTag Montage_Attack_LeftHand;
+
 	//~ MISC
+	FGameplayTag Abilities_Attack;
 	FGameplayTag Effect_HitReact;
 	
 private:

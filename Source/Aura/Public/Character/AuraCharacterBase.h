@@ -28,39 +28,31 @@ public:
 	
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
 
-	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
-
 	virtual void Die() override;
 
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleDeath(); 
+	virtual void MulticastHandleDeath();
+
+
+	/*
+  * MONTAGES
+  */
+	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
+	
+	UPROPERTY(EditAnywhere, Category="Combat")
+	TArray<FTaggedMontage> AttackMontages;
 
 protected:
 	virtual void BeginPlay() override;
 
 	virtual void InitAbilityActorInfo();
 
-	UPROPERTY(EditAnywhere,Category="Combat")
-	TObjectPtr<USkeletalMeshComponent> Weapon;
-
-	UPROPERTY(EditAnywhere,Category="Combat")
-	FName WeaponTipSocketName;
-
-	virtual FVector GetCombatSocketLocation() override;
-
 	UPROPERTY()
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 
 	UPROPERTY()
 	TObjectPtr<UAttributeSet> AttributeSet;
-	
 
-	/*
-	  * GAMEPLAY EFFECTS
-	  */
-	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level) const;
-
-	
 	/*
 	  * ATTRIBUTES
 	  */
@@ -76,14 +68,19 @@ protected:
 	TSubclassOf<UGameplayEffect> DefaultVitalAttributes;
 
 	/*
+	  * GAMEPLAY EFFECTS
+	  */
+	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level) const;
+
+	/*
 * GAMEPLAY ABILITIES
 */
 	void AddCharacterAbilities() const;
 
 
 	/*
-* MISC
-*/
+		* MISC
+		*/
 	//~ Dissolve Effects
 	void Dissolve();
 
@@ -98,14 +95,47 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<UMaterialInstance> WeaponDissolveMaterialInstance;
+
+	//~ Weapon 
+	UPROPERTY(EditAnywhere,Category="Combat")
+	TObjectPtr<USkeletalMeshComponent> Weapon;
+
+	UPROPERTY(EditAnywhere,Category="Combat")
+	FName WeaponTipSocketName;
+
+	UPROPERTY(EditAnywhere,Category="Combat")
+	FName LeftHandSocketName;
+
+	UPROPERTY(EditAnywhere,Category="Combat")
+	FName RightHandSocketName;
+	
+	//~ Character Status
+	bool bIsDead = false;
+
+
+	/*
+	  * INTERFACES
+	  */
+	//~ Combat Interface
+	virtual AActor* GetAvatar_Implementation() override;
+
+	virtual FVector GetCombatSocketLocation_Implementation(const FGameplayTag& MontageTag) override;
+
+	virtual bool IsDead_Implementation() const override;
+
+	virtual TArray<FTaggedMontage> GetAttackMontages_Implementation() override;
 	
 private:
-	UPROPERTY(EditAnywhere, Category="Combat")
-	TObjectPtr<UAnimMontage> HitReactMontage;
-	
 	/*
 	* GAMEPLAY ABILITIES
 	*/
 	UPROPERTY(EditAnywhere, Category="Abilities")
 	TArray<TSubclassOf<UGameplayAbility>> StartupAbilitiesList;
+
+	
+	/*
+  * MONTAGES
+  */
+	UPROPERTY(EditAnywhere, Category="Combat")
+	TObjectPtr<UAnimMontage> HitReactMontage;
 };
